@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="This is a portfolio of my data work">
+	<meta name="author" content="Ruchen Shangguan">
+	<meta name="generator" content="Hugo 0.74.3" />
+	<title>Heart Disease and Risk Factors &middot; Portfolio website for Ruchen Shangguan</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Ruchen&#39;s portfolio</strong> <span>A very first step with Git</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">Blogs</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">My projects</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Heart Disease and Risk Factors</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/blogs/heart.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="heart-disease-and-potential-risk-factors" class="section level1">
+<h1>1. Heart disease and potential risk factors</h1>
+<p>Millions of people develop some sort of heart disease every year and heart disease is the biggest killer of both men and women in the United States and around the world. Statistical analysis has identified many risk factors associated with heart disease such as age, blood pressure, total cholesterol, diabetes, hypertension, family history of heart disease, obesity, lack of physical exercise, etc. In this notebook, we’re going to run statistical tests and regression models using the Cleveland heart disease dataset to assess one particular factor – maximum heart rate one can achieve during exercise and how it is associated with a higher likelihood of getting heart disease.</p>
+<pre class="r"><code># Read datasets Cleveland_hd.csv into hd_data
+hd_data &lt;- read.csv(here::here(&quot;data&quot;,&quot;Cleveland_hd.csv&quot;))
+# take a look at the first 5 rows of hd_data
+head(hd_data,5)</code></pre>
+<pre><code>##   age sex cp trestbps chol fbs restecg thalach exang oldpeak slope ca thal
+## 1  63   1  1      145  233   1       2     150     0     2.3     3  0    6
+## 2  67   1  4      160  286   0       2     108     1     1.5     2  3    3
+## 3  67   1  4      120  229   0       2     129     1     2.6     2  2    7
+## 4  37   1  3      130  250   0       0     187     0     3.5     3  0    3
+## 5  41   0  2      130  204   0       2     172     0     1.4     1  0    3
+##   class
+## 1     0
+## 2     2
+## 3     1
+## 4     0
+## 5     0</code></pre>
+</div>
+<div id="converting-diagnosis-class-into-outcome-variable" class="section level1">
+<h1>2. Converting diagnosis class into outcome variable</h1>
+<p>We noticed that the outcome variable <code>class</code> has more than two levels. According to the codebook, any non-zero values can be coded as an “event.” Let’s create a new variable called <code>hd</code> to represent a binary 1/0 outcome.<br />
+There are a few other categorical/discrete variables in the dataset. Let’s also convert sex into a ‘factor’ for next step analysis. Otherwise, R will treat this as continuous by default.
+The full data dictionary is also displayed here.<br />
+[] (<a href="https://assets.datacamp.com/production/project_445/img/datadict.png" class="uri">https://assets.datacamp.com/production/project_445/img/datadict.png</a>")</p>
+<pre class="r"><code># Use the &#39;mutate&#39; function from dplyr to recode our data
+hd_data %&gt;% mutate(hd = ifelse(class &gt; 0, 1, 0))-&gt; hd_data
+# recode sex using mutate function and save as hd_data
+hd_data %&gt;% mutate(sex = factor(sex, levels = 0:1, labels = c(&quot;Female&quot;, &quot;Male&quot;)))-&gt; hd_data
+glimpse(hd_data)</code></pre>
+<pre><code>## Rows: 303
+## Columns: 15
+## $ age      &lt;int&gt; 63, 67, 67, 37, 41, 56, 62, 57, 63, 53, 57, 56, 56, 44,…
+## $ sex      &lt;fct&gt; Male, Male, Male, Male, Female, Male, Female, Female, M…
+## $ cp       &lt;int&gt; 1, 4, 4, 3, 2, 2, 4, 4, 4, 4, 4, 2, 3, 2, 3, 3, 2, 4, 3…
+## $ trestbps &lt;int&gt; 145, 160, 120, 130, 130, 120, 140, 120, 130, 140, 140, …
+## $ chol     &lt;int&gt; 233, 286, 229, 250, 204, 236, 268, 354, 254, 203, 192, …
+## $ fbs      &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0…
+## $ restecg  &lt;int&gt; 2, 2, 2, 0, 2, 0, 2, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0…
+## $ thalach  &lt;int&gt; 150, 108, 129, 187, 172, 178, 160, 163, 147, 155, 148, …
+## $ exang    &lt;int&gt; 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0…
+## $ oldpeak  &lt;dbl&gt; 2.3, 1.5, 2.6, 3.5, 1.4, 0.8, 3.6, 0.6, 1.4, 3.1, 0.4, …
+## $ slope    &lt;int&gt; 3, 2, 2, 3, 1, 1, 3, 1, 2, 3, 2, 2, 2, 1, 1, 1, 3, 1, 1…
+## $ ca       &lt;int&gt; 0, 3, 2, 0, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0…
+## $ thal     &lt;int&gt; 6, 3, 7, 3, 3, 3, 3, 3, 7, 7, 6, 3, 6, 7, 7, 3, 7, 3, 3…
+## $ class    &lt;int&gt; 0, 2, 1, 0, 0, 0, 3, 0, 2, 1, 0, 0, 2, 0, 0, 0, 1, 0, 0…
+## $ hd       &lt;dbl&gt; 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0…</code></pre>
+<pre class="r"><code>head(hd_data)</code></pre>
+<pre><code>##   age    sex cp trestbps chol fbs restecg thalach exang oldpeak slope ca
+## 1  63   Male  1      145  233   1       2     150     0     2.3     3  0
+## 2  67   Male  4      160  286   0       2     108     1     1.5     2  3
+## 3  67   Male  4      120  229   0       2     129     1     2.6     2  2
+## 4  37   Male  3      130  250   0       0     187     0     3.5     3  0
+## 5  41 Female  2      130  204   0       2     172     0     1.4     1  0
+## 6  56   Male  2      120  236   0       0     178     0     0.8     1  0
+##   thal class hd
+## 1    6     0  0
+## 2    3     2  1
+## 3    7     1  1
+## 4    3     0  0
+## 5    3     0  0
+## 6    3     0  0</code></pre>
+<div id="identifying-important-clinical-variables" class="section level2">
+<h2>3. Identifying important clinical variables</h2>
+<p>
+Now, let’s use statistical tests to see which predictors are related to heart disease. We can explore the associations for each variable in the dataset. Depending on the type of the data (i.e., continuous or categorical), we use t-test or chi-squared test to calculate the p-values.
+</p>
+<p>
+Recall, t-test is used to determine whether there is a significant difference between the means of two groups (e.g., is the mean age from group A different from the mean age from group B?). A chi-squared test for independence compares the equivalence of two proportions.
+</p>
+<pre class="r"><code># Does sex have an effect? Sex is a binary variable in this dataset,
+# so the appropriate test is chi-squared test
+table(hd_data$hd,hd_data$sex)</code></pre>
+<pre><code>##    
+##     Female Male
+##   0     72   92
+##   1     25  114</code></pre>
+<pre class="r"><code>hd_sex &lt;- chisq.test(hd_data$hd,hd_data$sex)
+
+# Does age have an effect? Age is continuous, so we use a t-test
+hd_age &lt;- t.test(age~hd,data=hd_data)
+
+# What about thalach? Thalach is continuous, so we use a t-test
+hd_heartrate &lt;- t.test(thalach~hd,data=hd_data)
+
+# Print the results to see if p&lt;0.05.
+print(hd_sex)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  hd_data$hd and hd_data$sex
+## X-squared = 22, df = 1, p-value = 3e-06</code></pre>
+<pre class="r"><code>print(hd_age)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  age by hd
+## t = -4, df = 301, p-value = 7e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -6.01 -2.07
+## sample estimates:
+## mean in group 0 mean in group 1 
+##            52.6            56.6</code></pre>
+<pre class="r"><code>print(hd_heartrate)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  thalach by hd
+## t = 8, df = 272, p-value = 9e-14
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  14.3 23.9
+## sample estimates:
+## mean in group 0 mean in group 1 
+##             158             139</code></pre>
+</div>
+</div>
+<div id="explore-the-associations-graphically-i" class="section level1">
+<h1>4. Explore the associations graphically (i)</h1>
+<p>
+A good picture is worth a thousand words. In addition to p-values from statistical tests, we can plot the age, sex, and maximum heart rate distributions with respect to our outcome variable. This will give us a sense of both the direction and magnitude of the relationship.
+</p>
+<p>
+First, let’s plot age using a boxplot since it is a continuous variable.
+</p>
+<pre class="r"><code># Recode hd to be labelled
+hd_data%&gt;%mutate(hd_labelled = ifelse(hd == 0, &quot;No Disease&quot;, &quot;Disease&quot;)) -&gt; hd_data
+
+# age vs hd
+ggplot(data = hd_data, aes(x = hd_labelled,y = age)) + geom_boxplot()</code></pre>
+<p><img src="/blogs/blog4_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<div id="explore-the-associations-graphically-ii" class="section level2">
+<h2>5. Explore the associations graphically (ii)</h2>
+<p>
+Next, let’s plot sex using a barplot since it is a binary variable in this dataset.
+</p>
+<pre class="r"><code># sex vs hd
+ggplot(data = hd_data,aes(x=hd_labelled,fill=sex)) + 
+                    geom_bar(position=&quot;fill&quot;) + 
+                    ylab(&quot;Sex %&quot;)</code></pre>
+<p><img src="/blogs/blog4_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="explore-the-associations-graphically-iii" class="section level2">
+<h2>6. Explore the associations graphically (iii)</h2>
+<p>
+And finally, let’s plot thalach using a boxplot since it is a continuous variable.
+</p>
+<pre class="r"><code># max heart rate vs hd
+ggplot(data = hd_data,aes(x=hd_labelled,y=thalach)) + geom_boxplot()</code></pre>
+<p><img src="/blogs/blog4_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="putting-all-three-variables-in-one-model" class="section level2">
+<h2>7. Putting all three variables in one model</h2>
+<p>
+The plots and the statistical tests both confirmed that all the three variables are highly significantly associated with our outcome (p&lt;0.001 for all tests).
+</p>
+<p>
+In general, we want to use multiple logistic regression when we have one binary outcome variable and two or more predicting variables. The binary variable is the dependent (Y) variable; we are studying the effect that the independent (X) variables have on the probability of obtaining a particular value of the dependent variable. For example, we might want to know the effect that maximum heart rate, age, and sex have on the probability that a person will have a heart disease in the next year. The model will also tell us what the remaining effect of maximum heart rate is after we control or adjust for the effects of the other two effectors.
+</p>
+<p>
+The <code>glm()</code> command is designed to perform generalized linear models (regressions) on binary outcome data, count data, probability data, proportion data, and many other data types. In our case, the outcome is binary following a binomial distribution.
+</p>
+<pre class="r"><code># use glm function from base R and specify the family argument as binomial 
+model &lt;- glm(data = hd_data, hd ~ age+sex+thalach, family=&quot;binomial&quot;)
+
+# guide for choosing the family : https://stats.stackexchange.com/questions/190763/how-to-decide-which-glm-family-to-use
+# extract the model summary
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = hd ~ age + sex + thalach, family = &quot;binomial&quot;, 
+##     data = hd_data)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -2.225  -0.849  -0.457   0.904   2.116  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  3.11161    1.60747    1.94    0.053 .  
+## age          0.03189    0.01644    1.94    0.052 .  
+## sexMale      1.49190    0.30719    4.86  1.2e-06 ***
+## thalach     -0.04054    0.00707   -5.73  9.9e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 417.98  on 302  degrees of freedom
+## Residual deviance: 332.85  on 299  degrees of freedom
+## AIC: 340.8
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div id="extracting-useful-information-from-the-model-output" class="section level2">
+<h2>8. Extracting useful information from the model output</h2>
+<p>
+It’s common practice in medical research to report Odds Ratio (OR) to quantify how strongly the presence or absence of property A is associated with the presence or absence of the outcome. When the OR is greater than 1, we say A is positively associated with outcome B (increases the Odds of having B). Otherwise, we say A is negatively associated with B (decreases the Odds of having B).
+</p>
+<p>
+The raw glm coefficient table (the ‘estimate’ column in the printed output) in R represents the log(Odds Ratios) of the outcome. Therefore, we need to convert the values to the original OR scale and calculate the corresponding 95% Confidence Interval (CI) of the estimated Odds Ratios when reporting results from a logistic regression.
+</p>
+<pre class="r"><code># load the broom package
+library(broom)
+
+# tidy up the coefficient table
+tidy_m &lt;- tidy(model)
+tidy_m</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term        estimate std.error statistic       p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 (Intercept)   3.11     1.61         1.94 0.0529       
+## 2 age           0.0319   0.0164       1.94 0.0524       
+## 3 sexMale       1.49     0.307        4.86 0.00000119   
+## 4 thalach      -0.0405   0.00707     -5.73 0.00000000993</code></pre>
+<pre class="r"><code># calculate OR
+tidy_m$OR &lt;- exp(tidy_m$estimate)
+
+# calculate 95% CI and save as lower CI and upper CI
+tidy_m$lower_CI &lt;- exp(tidy_m$estimate - 1.96 * tidy_m$std.error)
+tidy_m$upper_CI &lt;- exp(tidy_m$estimate + 1.96 * tidy_m$std.error)
+
+# display the updated coefficient table
+tidy_m</code></pre>
+<pre><code>## # A tibble: 4 x 8
+##   term     estimate std.error statistic    p.value     OR lower_CI upper_CI
+##   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Interc…   3.11     1.61         1.94    5.29e-2 22.5      0.962  524.   
+## 2 age        0.0319   0.0164       1.94    5.24e-2  1.03     1.00     1.07 
+## 3 sexMale    1.49     0.307        4.86    1.19e-6  4.45     2.43     8.12 
+## 4 thalach   -0.0405   0.00707     -5.73    9.93e-9  0.960    0.947    0.974</code></pre>
+</div>
+</div>
+<div id="predicted-probabilities-from-our-model" class="section level1">
+<h1>9. Predicted probabilities from our model</h1>
+<p>
+So far, we have built a logistic regression model and examined the model coefficients/ORs. We may wonder how can we use this model we developed to predict a person’s likelihood of having heart disease given his/her age, sex, and maximum heart rate. Furthermore, we’d like to translate the predicted probability into a decision rule for clinical use by defining a cutoff value on the probability scale. In practice, when an individual comes in for a health check-up, the doctor would like to know the predicted probability of heart disease, for specific values of the predictors: a 45-year-old female with a max heart rate of 150. To do that, we create a data frame called newdata, in which we include the desired values for our prediction.
+</p>
+<pre class="r"><code># get the predicted probability in our dataset using the predict() function
+pred_prob &lt;- predict(model,hd_data, type = &quot;response&quot;)
+
+# create a decision rule using probability 0.5 as cutoff and save the predicted decision into the main data frame
+hd_data$pred_hd &lt;- ifelse(pred_prob&gt;=0.5,1,0)
+
+# create a newdata data frame to save a new case information
+newdata &lt;- data.frame(age = 45, sex = &quot;Female&quot;, thalach = 150)
+
+# predict probability for this new case and print out the predicted value
+p_new &lt;- predict(model,newdata, type = &quot;response&quot;)
+p_new</code></pre>
+<pre><code>##     1 
+## 0.177</code></pre>
+</div>
+<div id="model-performance-metrics" class="section level1">
+<h1>10. Model performance metrics</h1>
+<p>
+Are the predictions accurate? How well does the model fit our data? We are going to use some common metrics to evaluate the model performance. The most straightforward one is Accuracy, which is the proportion of the total number of predictions that were correct. On the other hand, we can calculate the classification error rate using 1- accuracy. However, accuracy can be misleading when the response is rare (i.e., imbalanced response). Another popular metric, Area Under the ROC curve (AUC), has the advantage that it’s independent of the change in the proportion of responders. AUC ranges from 0 to 1. The closer it gets to 1 the better the model performance. Lastly, a confusion matrix is an N X N matrix, where N is the level of outcome. For the problem at hand, we have N=2, and hence we get a 2 X 2 matrix. It cross-tabulates the predicted outcome levels against the true outcome levels.
+</p>
+<p>
+After these metrics are calculated, we’ll see (from the logistic regression OR table) that older age, being male and having a lower max heart rate are all risk factors for heart disease. We can also apply our model to predict the probability of having heart disease. For a 45 years old female who has a max heart rate of 150, our model generated a heart disease probability of 0.177 indicating low risk of heart disease. Although our model has an overall accuracy of 0.71, there are cases that were misclassified as shown in the confusion matrix. One way to improve our current model is to include other relevant predictors from the dataset into our model, but that’s a task for another day!
+</p>
+<pre class="r"><code># load Metrics package
+library(Metrics)
+# calculate auc, accuracy, clasification error
+auc &lt;- auc(hd_data$hd,hd_data$pred_hd)
+accuracy &lt;- accuracy(hd_data$hd,hd_data$pred_hd)
+classification_error &lt;- ce(hd_data$hd,hd_data$pred_hd)
+
+# print out the metrics on to screen
+print(paste(&quot;AUC=&quot;, auc))</code></pre>
+<pre><code>## [1] &quot;AUC= 0.706483593612915&quot;</code></pre>
+<pre class="r"><code>print(paste(&quot;Accuracy=&quot;, accuracy))</code></pre>
+<pre><code>## [1] &quot;Accuracy= 0.70957095709571&quot;</code></pre>
+<pre class="r"><code>print(paste(&quot;Classification Error=&quot;, classification_error))</code></pre>
+<pre><code>## [1] &quot;Classification Error= 0.29042904290429&quot;</code></pre>
+<pre class="r"><code># confusion matrix
+table(hd_data$hd,hd_data$pred_hd, dnn=c(&quot;True Status&quot;,&quot;Predicted Status&quot;)) # confusion matrix</code></pre>
+<pre><code>##            Predicted Status
+## True Status   0   1
+##           0 122  42
+##           1  46  93</code></pre>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://www.twitter.com" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; London Business School</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>
