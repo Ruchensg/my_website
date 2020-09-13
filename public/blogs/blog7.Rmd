@@ -1,0 +1,150 @@
+---
+title: "2016 California Contributors plots"
+date: '2020-09-04'
+description: Who and where did they raise the most money for the 2016 US Presidential election?
+draft: fasle
+image: 
+keywords: ''
+slug: blog7
+categories:
+- ''
+- ''
+---
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+```
+
+# Challenge 2: 2016 California Contributors plots
+
+The task here is to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.
+
+```{r challenge2, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "challenge2.png"))
+```
+
+
+## We replicate Hilary and Trump chart
+```{r message=FALSE, load_CA_data, warnings=FALSE}
+
+# Make sure you use vroom() as it is significantly faster than read.csv()
+CA_contributors_2016 <- vroom::vroom(here::here("data","blog7_CA_contributors_2016.csv"))
+zip_code_city <- vroom::vroom(here::here("data","blog7_zip_code_database.csv"))
+
+# The following is just to show the logic
+# check data
+glimpse(CA_contributors_2016)
+glimpse(zip_code_city)
+skim(zip_code_city) #notice that we have multiple zips for one city 
+# we need to join on zip hence force same data type
+zip_code_city <- zip_code_city %>% 
+                    mutate(zip=as.double(zip_code_city$zip))
+glimpse(zip_code_city)
+skim(CA_contributors_2016)
+head(CA_contributors_2016)
+# join data and select variables of interest
+CA_contributors_2016_bycity <- CA_contributors_2016 %>% 
+	                                left_join(zip_code_city,by="zip") %>%
+	                                group_by(cand_nm,primary_city) %>%
+	                                summarize(money_ttl = sum(contb_receipt_amt)) %>% 
+	                                select(candidate = cand_nm ,city = primary_city, money_raised = money_ttl) 
+# scales
+library(scales)
+# plot hilary top 10, replicate so no economist theme
+hilary <- CA_contributors_2016_bycity %>% 
+	                      filter(candidate == "Clinton, Hillary Rodham") %>% 
+	                      top_n(10,wt = money_raised) %>% 
+	                      ggplot(aes(x=reorder(city,money_raised),y=money_raised))+
+	                      geom_col(fill="dodgerblue3")+
+	                      coord_flip()+
+			 facet_grid(. ~ candidate) +
+	                      labs(title=NULL,x=NULL,y=NULL)+
+	                      scale_y_continuous(labels = scales::dollar_format())+
+			 theme_update(plot.title = element_text(hjust = 0.5)) + #center the title
+	                      theme(strip.background = element_rect(fill="grey"),
+	                      strip.text = element_text(size=8, colour="black"),
+	                      #aspect.ratio = 4/3
+	                      )+
+                     theme_bw() 
+hilary
+# plot trump
+trump<- CA_contributors_2016_bycity %>% 
+	                      filter(candidate == "Trump, Donald J.") %>% 
+	                      top_n(10,wt = money_raised) %>% 
+	                      ggplot(aes(x=reorder(city,money_raised),y=money_raised))+
+	                      geom_col(fill="brown3")+
+	                      coord_flip()+
+	                      labs(title=NULL,x=NULL,y=NULL)+
+	                      scale_y_continuous(labels = scales::dollar_format())+
+	                      facet_grid(. ~ candidate)+
+			                  theme_update(plot.title = element_text(hjust = 0.5)) + #center the title
+	                      theme(strip.background = element_rect(fill="grey"),
+	                      strip.text = element_text(size=8, colour="black"),
+	                      #aspect.ratio = 4/3
+	                      )+
+	                      theme_bw()
+trump
+# put together using patchwork
+library(patchwork)
+hilary_trump <- hilary + 
+      trump +
+      plot_annotation(title="Who raised most money?",caption="amount raised")
+      theme_update(plot.title = element_text(size=10,hjust=0.1),
+                   aspect.ratio = 9/4,
+                   plot.caption = element_text(hjust=0.5))
+# save the picture in the right proportion
+ggsave("hilary_trump.jpg",plot=hilary_trump,width = 9,height = 4, path = here::here("images"))
+# put it here
+knitr::include_graphics(here::here("images", "hilary_trump.jpg"))
+```
+
+## We try to plot top 10 candidates
+```{r}
+# not sure how to combine so put it in steps
+top10candidate <- CA_contributors_2016_bycity %>% 
+	                      group_by(candidate) %>%
+	                      summarize(money_raised_person = sum(money_raised)) %>% 
+	                      top_n(10,wt = money_raised_person) %>% 
+	                      select(candidate)
+top10list<-top10candidate$candidate
+top10plot <- CA_contributors_2016_bycity %>% 
+                filter(candidate %in% top10list) %>% 
+                top_n(10,wt=money_raised) %>% 
+                 ggplot(aes(x=reorder(city,money_raised),y=money_raised))+
+	                      geom_col()+
+	                      coord_flip()+
+	                      labs(title="Top 10 candidates ranked by money raised",x=NULL,y=NULL)+
+	                      scale_y_continuous(labels = scales::dollar_format())+
+	                      facet_wrap(~ candidate,scales="free",nrow=2,ncol=5)+
+	                      theme_economist(base_size = 10)
+# save the picture 
+ggsave("top10plot.jpg",plot=top10plot,width = 20,height = 15,path = here::here("images"))
+
+# put it here
+knitr::include_graphics(here::here("images", "top10plot.jpg"))
+```

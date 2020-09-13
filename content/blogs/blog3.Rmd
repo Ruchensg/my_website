@@ -57,7 +57,7 @@ library(here)
 
 ```{r}
 # Load the data
-survey <- read_csv(here::here("data","Kaggle_language_multipleChoiceResponses.csv"),
+survey <- vroom::vroom(here::here("data","Kaggle_language_multipleChoiceResponses.csv"),
                                 col_names=TRUE)
 
 #kbl(head(survey,3)) %>% 

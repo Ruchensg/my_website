@@ -37,7 +37,7 @@ library(kableExtra)
 library(stringr)
 library(here)</code></pre>
 <pre class="r"><code># Load the data
-survey &lt;- read_csv(here::here(&quot;data&quot;,&quot;Kaggle_language_multipleChoiceResponses.csv&quot;),
+survey &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;Kaggle_language_multipleChoiceResponses.csv&quot;),
                                 col_names=TRUE)
 
 #kbl(head(survey,3)) %&gt;% 

@@ -31,6 +31,17 @@ In this project, we are going to find out what tools and languages professionals
     </item>
     
     <item>
+      <title>IMDB ratings: Differences between directors</title>
+      <link>/blogs/blog6/</link>
+      <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/blog6/</guid>
+      <description>IMDB ratings: Differences between directors Objective In this section, we would like to reproduce this graph. We would be using geom_errorbar() and geom_rect()
+ Replicating the graph First, we load the data and examine its structure.
+movies &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;blog6_movies.csv&amp;quot;)) glimpse(movies) ## Rows: 2,961 ## Columns: 11 ## $ title &amp;lt;chr&amp;gt; &amp;quot;Avatar&amp;quot;, &amp;quot;Titanic&amp;quot;, &amp;quot;Jurassic World&amp;quot;, &amp;quot;The … ## $ genre &amp;lt;chr&amp;gt; &amp;quot;Action&amp;quot;, &amp;quot;Drama&amp;quot;, &amp;quot;Action&amp;quot;, &amp;quot;Action&amp;quot;, &amp;quot;Acti… ## $ director &amp;lt;chr&amp;gt; &amp;quot;James Cameron&amp;quot;, &amp;quot;James Cameron&amp;quot;, &amp;quot;Colin Tre… ## $ year &amp;lt;dbl&amp;gt; 2009, 1997, 2015, 2012, 2008, 1999, 1977, 20… ## $ duration &amp;lt;dbl&amp;gt; 178, 194, 124, 173, 152, 136, 125, 141, 164,… ## $ gross &amp;lt;dbl&amp;gt; 7.</description>
+    </item>
+    
+    <item>
       <title>Mask Acceptance</title>
       <link>/blogs/blog5/</link>
       <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
@@ -38,6 +49,16 @@ In this project, we are going to find out what tools and languages professionals
       <guid>/blogs/blog5/</guid>
       <description>NYT mask use Github source for data https://github.com/nytimes/covid-19-data/tree/master/mask-use
  Getting the data #Source for data url &amp;lt;- &amp;quot;https://github.com/nytimes/covid-19-data/raw/master/mask-use/mask-use-by-county.csv&amp;quot; nyt_mask_survey &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;nyt_mask_survey.csv&amp;quot;)) nyt_mask_survey &amp;lt;- nyt_mask_survey %&amp;gt;% clean_names() %&amp;gt;% mutate( mostly_yes= frequently+always, mostly_no = never+rarely, delta = mostly_yes-mostly_no ) glimpse(nyt_mask_survey) ## Rows: 3,142 ## Columns: 9 ## $ countyfp &amp;lt;chr&amp;gt; &amp;quot;01001&amp;quot;, &amp;quot;01003&amp;quot;, &amp;quot;01005&amp;quot;, &amp;quot;01007&amp;quot;, &amp;quot;01009&amp;quot;, &amp;quot;01011&amp;quot;,… ## $ never &amp;lt;dbl&amp;gt; 0.053, 0.083, 0.067, 0.020, 0.053, 0.031, 0.102, 0.15… ## $ rarely &amp;lt;dbl&amp;gt; 0.</description>
+    </item>
+    
+    <item>
+      <title>2016 California Contributors plots</title>
+      <link>/blogs/blog7/</link>
+      <pubDate>Fri, 04 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/blog7/</guid>
+      <description>Challenge 2: 2016 California Contributors plots The task here is to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.
+We replicate Hilary and Trump chart # Make sure you use vroom() as it is significantly faster than read.csv() CA_contributors_2016 &amp;lt;- vroom::vroom(here::here(&amp;quot;data&amp;quot;,&amp;quot;blog7_CA_contributors_2016.csv&amp;quot;)) zip_code_city &amp;lt;- vroom::vroom(here::here(&amp;quot;data&amp;quot;,&amp;quot;blog7_zip_code_database.csv&amp;quot;)) # The following is just to show the logic # check data glimpse(CA_contributors_2016) ## Rows: 1,292,843 ## Columns: 4 ## $ cand_nm &amp;lt;chr&amp;gt; &amp;quot;Clinton, Hillary Rodham&amp;quot;, &amp;quot;Clinton, Hillary R… ## $ contb_receipt_amt &amp;lt;dbl&amp;gt; 50.</description>
     </item>
     
     <item>

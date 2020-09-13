@@ -1,0 +1,183 @@
+---
+title: "IMDB ratings: Differences between directors"
+date: '2020-09-10'
+description: Which director has better moving ratings, Tim Burton or Steven Spielberg?
+draft: fasle
+image: 
+keywords: ''
+slug: blog6
+categories:
+- ''
+- ''
+---
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(infer)
+library(openintro)
+```
+
+
+# IMDB ratings: Differences between directors
+## Objective
+In this section, we would like to reproduce this graph. We would be using `geom_errorbar()` and `geom_rect()` 
+
+```{r directors, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("images", "directors.png"))
+```
+
+## Replicating the graph
+First, we load the data and examine its structure.
+
+```{r load-movies-data}
+movies <- read_csv(here::here("data", "blog6_movies.csv"))
+glimpse(movies)
+```
+
+Then we calculate the statistics and confidence interval needed for the plot.
+```{r calculate-the-CI-for-IMDB, warning=TRUE}
+selected_directors <- movies %>% 
+                        select(director, rating) %>% 
+                        filter(director == "Tim Burton" | director == "Steven Spielberg") %>% 
+                        group_by(director) %>%
+                        summarize(mean = mean(rating),
+                                  sd = sd(rating), 
+                                  count = n(), 
+                                  se = sd/sqrt(count),
+                                  t_critical = qt(0.975,count-1),
+                                  lower_ci = mean - t_critical*se,
+                                  upper_ci = mean + t_critical*se)
+
+#selected_directors table
+library(kableExtra)
+kbl(selected_directors) %>% 
+  kable_styling(full_width = F) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+# we can do this easily in the pipe line but the format won't be so good-looking
+#selected_directors %>% 
+  #select(director, mean, lower_ci, upper_ci) %>% 
+  #knitr::kable(digits = 2)
+```
+
+Finally we replicate the picture.
+```{r plot-the-IMDB, warning=FALSE}
+# plot
+idmb_plot <- ggplot(selected_directors, aes(x = mean, y = reorder(director, mean), color = director)) +
+  geom_errorbar(aes(xmin = lower_ci, xmax = upper_ci), width = 0.1,size = 2) +
+  labs(title = "Do Spielberg and Burton have the same IMDB ratings?",
+       subtitle = "95% confidence intervals overlap",
+       x = "Mean IMBD Rating",
+       y = "") +
+    geom_point(size = 4) +
+   #add the mean
+     geom_label(aes(y=reorder(director,mean),x=mean,
+                   label = round(mean,2)),
+                hjust=0.4, vjust=-0.3,
+               color="black", fill=NA, label.size = NA, size=7.5)+
+    #add the lower number 
+    geom_label(aes(y=reorder(director,mean),x=lower_ci,
+                   label = round(lower_ci,2)),
+                hjust=0.4, vjust=-0.3,
+               color="black", fill=NA, label.size = NA, size=5)+
+    #add the upper number
+   geom_label(aes(y=reorder(director,mean),x=upper_ci,
+                   label = round(upper_ci,2)),
+                hjust=0.4, vjust=-0.3,
+               color="black", fill=NA, label.size = NA, size=5)+
+    geom_rect(aes(NULL,NULL,xmin=7.27,xmax=7.33,),
+            ymin=0,ymax=3, colour="grey", size=0.5, alpha=0.2)+ #for ymax I just tried 1,2,3 and 3 seems a good fit
+  theme_bw()+
+  theme(legend.position = "none",aspect.ratio=0.6) + #this sets the ratio of height/width
+  #guides(color=FALSE) #another way to remove legend of color is using guides()
+  NULL
+#idmb_plot
+
+ggsave("imdb.jpg", plot = idmb_plot,path=here::here("images"),height =6, width=10 )
+knitr::include_graphics(here::here("images", "imdb.jpg"))
+```
+
+## Hypothesis testing  
+
+In addition, we will run a hypothesis test. We would use both the `t.test` command and the `infer` package to simulate from a null distribution, where we assume zero difference between the two.  
+
+- The null hypothesis H0: there is no difference between the mean rating of movies directed by Tim Burton and those directed by Steven Spielberg.  
+- The alternative hypothesis Ha: there is difference between the mean rating of movies directed by Tim Burton and by Steven Spielberg.  
+
+
+```{r null-dist-imdb-t-test}
+#prepare the dataset 
+movies_two <- movies %>%
+              select(director, rating) %>% 
+              filter(director == "Steven Spielberg" | director == "Tim Burton")
+t_movie<- t.test(rating~director,data=movies_two)
+print(t_movie)
+```
+
+
+
+```{r null-dist-imdb-infer, warning=FALSE}
+obs_diff_imdb <- movies_two %>%
+  specify(rating ~ director) %>%
+  calculate(stat = "diff in means", order = c("Steven Spielberg","Tim Burton"))
+#obs_diff_imdb
+set.seed(1414) #we need to set seed 
+null_dist_imdb <- movies_two %>% 
+                  specify(rating ~ director) %>% #response is rating, exploratory is director
+                  hypothesize(null = "independence") %>%
+                  generate(reps = 1000, type = "permute") %>%
+                  calculate(stat = "diff in means", order = c("Steven Spielberg", "Tim Burton"))
+#null_dist_imdb
+#ggplot(null_dist_imdb,aes(x=stat))+
+  #geom_histogram(binwidth = 0.05)
+
+#check where our sample’s observed statistic lie on this distribution
+null_dist_imdb %>% visualize() +
+  shade_p_value(obs_stat = obs_diff_imdb, direction = "two-sided")+
+  labs(title="Our observed statisitc seem extreme")+
+  theme_economist()
+#check the p-value
+p_value_imdb <- null_dist_imdb %>%
+  get_p_value(obs_stat = obs_diff_imdb, direction = "two_sided")
+p_value_imdb
+#construct the CI
+CI_imdb <- null_dist_imdb  %>%
+# calculate the confidence interval around the point estimate
+get_confidence_interval(point_estimate = obs_diff_imdb,
+                          # at the 95% confidence level
+                          level = .95,
+                          # using the standard error
+                          type = "se")
+print(CI_imdb)
+# we can find more information here https://infer.netlify.app/articles/infer.html
+
+```
+
+According to the results of Welch two sample t-test, the t-statistics is 3 (>2), the p-value is 0.01 (<0.05), and the 95% confidence interval is [0.16,1.13] (does not contain 0). And according to the results using `infer`, the p-value is 0.012 (<0.05), and the 95% confidence interval is [0.151,1.13] (does not contain 0).  
+
+Based on the consistent results above, we reject the null hypothesis and conclude there is difference between the mean rating of movies directed by Tim Burton and those directed by Steven Spielberg.

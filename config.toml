@@ -38,7 +38,7 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "Ruchen's portfolio"
-    subtitle = "A growing data analyst"
+    subtitle = ""
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -82,7 +82,7 @@ disqusShortname = ""
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
     title = "Hi, this is Ruchen"
-    subtitle = "Come explore my data visualisation and analytics pieces."
+    subtitle = "Come explore my data visualisation and analytic pieces."
     buttonText = "Get Started"
 
 
@@ -104,16 +104,16 @@ disqusShortname = ""
       url = "blogs/blog4"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
+      title = "2016 California Contributors plots"
+      subtitle = "Who and where did they raise the most money for the 2016 US Presidential election?"
       image = "pic03.jpg"
-      url = "blogs/magna"
+      url = "blogs/blog7"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
+      title = "IMDB ratings: Differences between directors"
+      subtitle = "Which director has better moving ratings, Tim Burton or Steven Spielberg?"
       image = "pic04.jpg"
-      url = "blogs/ipsum"
+      url = "blogs/blog6"
 
 #    [[params.tiles.showcase]]
 #      title = "Consequat"
@@ -138,12 +138,12 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
+    title = "About me"
+    subtitle = """I'm Ruchen and currently reading for Master of Analytics and Management in London Business School.  
+    I have working experiences as data analyst and marketing interns, 
+    helping retailers and online travel agencies to monitor sales performance, 
+    increase customer engagement, and identify potential marketing opportunities.
+     """
     buttonText = "Get Started"
     url = "blogs"
 
@@ -180,9 +180,9 @@ disqusShortname = ""
 
     [[params.contact.address]]
     title = "Address"
-    street = "Street"
-    city = "City, ST 00000"
-    country = "Country"
+    street = "London Business School"
+    city = "Regent's Park "
+    country = "London NW1 4SA"
 
   # Footer section
   [params.footer]
@@ -190,30 +190,31 @@ disqusShortname = ""
     copyright = "London Business School"
 
     # Uses font awesome icons
-    [[params.footer.social]]
-      icon = "fa-twitter"
-      url= "https://www.twitter.com"
-      label = "Twitter"
+    #[[params.footer.social]]
+     # icon = "fa-twitter"
+     # url= "https://www.twitter.com"
+     # label = "Twitter"
 
-    [[params.footer.social]]
-      icon = "fa-facebook"
-      url= "https://www.facebook.com"
-      label = "Facebook"
+    #[[params.footer.social]]
+     # icon = "fa-facebook"
+     # url= "https://www.facebook.com"
+      #label = "Facebook"
 
-    [[params.footer.social]]
-      icon = "fa-instagram"
-      url= "https://www.instagram.com"
-      label = "Instagram"
+   # [[params.footer.social]]
+     # icon = "fa-instagram"
+     # url= "https://www.instagram.com"
+     # label = "Instagram"
     
     [[params.footer.social]]
+      icon = "fa-linkedin"
+      url= "https://www.linkedin.com/in/ruchensg"
+      label = "LinkedIn"
+      
+    [[params.footer.social]]
       icon = "fa-github"
-      url= "https://www.github.com"
+      url= "https://github.com/Ruchensg/my_website"
       label = "GitHub"
 
-    [[params.footer.social]]
-      icon = "fa-linkedin"
-      url= "https://www.linkedin.com"
-      label = "LinkedIn"
 
     [[params.footer.quicklinks]]
       text = "Design: "
