@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="This is a portfolio of my data work">
+	<meta name="author" content="Ruchen Shangguan">
+	<meta name="generator" content="Hugo 0.74.3" />
+	<title>Programming Language Preference &middot; Portfolio website for Ruchen Shangguan</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Ruchen&#39;s portfolio</strong> <span>A growing data analyst</span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/blogs">Blogs</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs" class="button special fit">My projects</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Programming Language Preference</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/blogs/R_Python.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="welcome-to-the-world-of-data-science" class="section level1">
+<h1>Welcome to the world of data science</h1>
+<p>Throughout the world of data science, there are many languages and tools that can be used to complete a given task.</p>
+<p>In this project, we are going to find out what tools and languages professionals use in their day-to-day work. Our data comes from the Kaggle Data Science Survey which includes responses from over 10,000 people that write code to analyze data in their daily work.</p>
+<pre class="r"><code># Load necessary packages
+library(plyr)  #Data Manipulation
+library(tidyverse) # Tidy data and other packages
+library(ggplot2) #Data Visualisation
+library(ggthemes) 
+library(plotly)
+library(RColorBrewer) 
+library(scales) 
+library(cowplot) 
+library(wordcloud2) 
+library(splitstackshape) 
+library(reshape2) 
+library(wordcloud)
+library(viridis)
+library(plotrix)
+library(knitr)
+library(kableExtra)
+library(stringr)
+library(here)</code></pre>
+<pre class="r"><code># Load the data
+survey &lt;- read_csv(here::here(&quot;data&quot;,&quot;Kaggle_language_multipleChoiceResponses.csv&quot;),
+                                col_names=TRUE)
+
+#kbl(head(survey,3)) %&gt;% 
+  #kable_styling(full_width = F) %&gt;% 
+  #kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))
+
+# We need unique identifiers for each observation
+survey_withid&lt;- tibble::rowid_to_column(survey, &quot;Respondent&quot;)</code></pre>
+<pre class="r"><code># Subset only what we need
+responses &lt;- survey_withid %&gt;% 
+              select(Respondent, WorkToolsSelect,      
+                      LanguageRecommendationSelect,EmployerIndustry, WorkAlgorithmsSelect)
+# Print the first 6 rows
+#kbl(head(responses,6)) %&gt;% 
+  #kable_styling(full_width = F) %&gt;% 
+  #kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;, &quot;responsive&quot;))</code></pre>
+</div>
+<div id="using-multiple-tools" class="section level1">
+<h1>Using multiple tools</h1>
+<p>Now that we have loaded in the survey results, we want to focus on the tools and languages that the survey respondents use at work.</p>
+<p>To get a better idea of how the data are formatted, we will look at the first respondent’s tool-use and see that this survey-taker listed multiple tools that are each separated by a comma.</p>
+<p>To learn how many people use each tool, we need to separate out all of the tools used by each individual. There are several ways to complete this task, but we will use str_split() from stringr to separate the tools at each comma. Since that will create a list inside of the data frame, we can use the tidyr function unnest() to separate each list item into a new row.</p>
+<pre class="r"><code># Print the first respondent&#39;s tools and languages
+responses  %&gt;% filter(Respondent==&quot;2&quot;)  %&gt;%  select (WorkToolsSelect)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   WorkToolsSelect
+##   &lt;chr&gt;          
+## 1 &lt;NA&gt;</code></pre>
+<pre class="r"><code># Add a new column, and unnest the new column
+tools &lt;- responses  %&gt;% 
+    mutate(work_tools = str_split(WorkToolsSelect,&quot;,&quot;))  %&gt;% 
+    unnest(work_tools)
+    
+# View the first 6 rows of tools
+# head(tools,6)</code></pre>
+</div>
+<div id="counting-users-of-each-tool" class="section level1">
+<h1>Counting users of each tool</h1>
+<p>Now that we’ve split apart all of the tools used by each respondent, we can figure out which tools are the most popular.</p>
+<pre class="r"><code># Group the data by work_tools, summarise the counts, and arrange in descending order
+tool_count &lt;- tools  %&gt;% 
+    group_by(work_tools)  %&gt;% 
+    summarise(count=n())  %&gt;% 
+    arrange(desc(count))
+    
+# Print the first 6 results
+head(tool_count,6)</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   work_tools        count
+##   &lt;chr&gt;             &lt;int&gt;
+## 1 &lt;NA&gt;               8761
+## 2 Python             6073
+## 3 R                  4708
+## 4 SQL                4261
+## 5 Jupyter notebooks  3206
+## 6 TensorFlow         2256</code></pre>
+</div>
+<div id="plotting-the-most-popular-tools" class="section level1">
+<h1>Plotting the most popular tools</h1>
+<p>Let’s see how the most popular tools stack up against the rest.</p>
+<pre class="r"><code># Create a bar chart of the work_tools column, most counts on the far right
+ggplot(tool_count,aes(x=fct_reorder(work_tools,count),y=count)) + 
+    geom_bar(stat=&quot;identity&quot;) +
+    labs(x=&quot;Worktools&quot;)+
+    theme(axis.text.x  = element_text(angle = 90, 
+                                     vjust = 0.5,
+                                     hjust = 1))</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-6-1.png" width="648" style="display: block; margin: auto;" />
+# The R vs Python debate
+Within the field of data science, there is a lot of debate among professionals about whether R or Python should reign supreme. You can see from our last figure that R and Python are the two most commonly used languages, but it’s possible that many respondents use both R and Python. Let’s take a look at how many people use R, Python, and both tools.</p>
+<pre class="r"><code># Create a new column called language preference
+debate_tools &lt;- responses  %&gt;% 
+   mutate(language_preference = case_when(
+       str_detect(WorkToolsSelect,&quot;R&quot;)&amp;str_detect(WorkToolsSelect,&quot;Python&quot;,negate=TRUE) ~ &quot;R&quot;,
+       str_detect(WorkToolsSelect,&quot;Python&quot;)&amp;str_detect(WorkToolsSelect,&quot;R&quot;,negate=TRUE) ~ &quot;Python&quot;,
+        str_detect(WorkToolsSelect,&quot;R&quot;)&amp;str_detect(WorkToolsSelect,&quot;Python&quot;) ~&quot;both&quot;,
+       TRUE ~&quot;neither&quot;
+   ))
+# # Returns TRUE if the pattern do NOT match
+#str_detect(fruit, &quot;^p&quot;, negate = TRUE)
+#&gt; [1]  TRUE  TRUE FALSE FALSE
+# Print the first 6 rows
+head(debate_tools,6)</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   Respondent WorkToolsSelect LanguageRecomme… EmployerIndustry
+##        &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;           
+## 1          1 Amazon Web ser… F#               Internet-based  
+## 2          2 &lt;NA&gt;            Python           &lt;NA&gt;            
+## 3          3 &lt;NA&gt;            R                &lt;NA&gt;            
+## 4          4 Amazon Machine… Python           Mix of fields   
+## 5          5 C/C++,Jupyter … Python           Technology      
+## 6          6 Jupyter notebo… Python           Academic        
+## # … with 2 more variables: WorkAlgorithmsSelect &lt;chr&gt;,
+## #   language_preference &lt;chr&gt;</code></pre>
+</div>
+<div id="plotting-r-vs-python-users" class="section level1">
+<h1>Plotting R vs Python users</h1>
+<p>Now we just need to take a closer look at how many respondents use R, Python, and both!</p>
+<pre class="r"><code># Group by language preference, calculate number of responses, and remove &quot;neither&quot;
+debate_plot &lt;- debate_tools  %&gt;% 
+   group_by(language_preference)  %&gt;% 
+   summarise(count=n())  %&gt;% 
+    filter(language_preference != &quot;neither&quot;)
+debate_plot</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   language_preference count
+##   &lt;chr&gt;               &lt;int&gt;
+## 1 both                 3660
+## 2 Python               2413
+## 3 R                    1220</code></pre>
+<pre class="r"><code># Create a bar chart
+ggplot(debate_plot,aes(x=language_preference,y=count))+
+    geom_bar(stat=&quot;identity&quot;) #if not specify identity then only have x</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-8-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="language-recommendations" class="section level1">
+<h1>Language recommendations</h1>
+<p>It looks like the largest group of professionals program in both Python and R. But what happens when they are asked which language they recommend to new learners? Do R lovers always recommend R?</p>
+<pre class="r"><code># Group by, summarise, arrange, mutate, and filter
+recommendations &lt;- debate_tools  %&gt;% 
+    group_by(language_preference,LanguageRecommendationSelect)  %&gt;% 
+    summarise(count = n()) %&gt;% 
+    arrange(language_preference,desc(count)) %&gt;%  #arrange within each group of language_preference
+    mutate(row = row_number()) %&gt;% 
+    filter(row&lt;=4)
+recommendations</code></pre>
+<pre><code>## # A tibble: 16 x 4
+## # Groups:   language_preference [4]
+##    language_preference LanguageRecommendationSelect count   row
+##    &lt;chr&gt;               &lt;chr&gt;                        &lt;int&gt; &lt;int&gt;
+##  1 both                Python                        1917     1
+##  2 both                R                              912     2
+##  3 both                &lt;NA&gt;                           591     3
+##  4 both                SQL                            108     4
+##  5 neither             &lt;NA&gt;                          4447     1
+##  6 neither             Python                        3088     2
+##  7 neither             R                             1067     3
+##  8 neither             C/C++/C#                       205     4
+##  9 Python              Python                        1742     1
+## 10 Python              &lt;NA&gt;                           459     2
+## 11 Python              C/C++/C#                        48     3
+## 12 Python              Matlab                          43     4
+## 13 R                   R                              632     1
+## 14 R                   &lt;NA&gt;                           221     2
+## 15 R                   Python                         194     3
+## 16 R                   SQL                             75     4</code></pre>
+</div>
+<div id="the-most-recommended-language-by-the-language-used" class="section level1">
+<h1>The most recommended language by the language used</h1>
+<p>Finally, let’s graphically determine which languages are most recommended based on the language that a person uses.</p>
+<pre class="r"><code># Create a faceted bar plot
+ggplot(recommendations, aes(x=LanguageRecommendationSelect,y=count)) +
+    geom_bar(stat=&quot;identity&quot;)+
+    facet_wrap(~language_preference)</code></pre>
+<p><img src="/blogs/blog3_files/figure-html/unnamed-chunk-10-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>We’ve found that Python is the most popular language used among Kaggle data scientists, but R users aren’t far behind. While Python users may highly recommend that new learners learn Python, R users are loyal to R when making recommendations.</p>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://www.twitter.com" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; London Business School</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

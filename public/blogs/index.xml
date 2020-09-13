@@ -12,6 +12,16 @@
     
     
     <item>
+      <title>Programming Language Preference</title>
+      <link>/blogs/blog3/</link>
+      <pubDate>Sun, 13 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/blog3/</guid>
+      <description>Welcome to the world of data science Throughout the world of data science, there are many languages and tools that can be used to complete a given task.
+In this project, we are going to find out what tools and languages professionals use in their day-to-day work. Our data comes from the Kaggle Data Science Survey which includes responses from over 10,000 people that write code to analyze data in their daily work.</description>
+    </item>
+    
+    <item>
       <title>Heart Disease and Risk Factors</title>
       <link>/blogs/blog4/</link>
       <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
@@ -28,15 +38,6 @@
       <guid>/blogs/blog5/</guid>
       <description>NYT mask use Github source for data https://github.com/nytimes/covid-19-data/tree/master/mask-use
  Getting the data #Source for data url &amp;lt;- &amp;quot;https://github.com/nytimes/covid-19-data/raw/master/mask-use/mask-use-by-county.csv&amp;quot; nyt_mask_survey &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;nyt_mask_survey.csv&amp;quot;)) nyt_mask_survey &amp;lt;- nyt_mask_survey %&amp;gt;% clean_names() %&amp;gt;% mutate( mostly_yes= frequently+always, mostly_no = never+rarely, delta = mostly_yes-mostly_no ) glimpse(nyt_mask_survey) ## Rows: 3,142 ## Columns: 9 ## $ countyfp &amp;lt;chr&amp;gt; &amp;quot;01001&amp;quot;, &amp;quot;01003&amp;quot;, &amp;quot;01005&amp;quot;, &amp;quot;01007&amp;quot;, &amp;quot;01009&amp;quot;, &amp;quot;01011&amp;quot;,… ## $ never &amp;lt;dbl&amp;gt; 0.053, 0.083, 0.067, 0.020, 0.053, 0.031, 0.102, 0.15… ## $ rarely &amp;lt;dbl&amp;gt; 0.</description>
-    </item>
-    
-    <item>
-      <title>Tempus</title>
-      <link>/blogs/tempus/</link>
-      <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
-      
-      <guid>/blogs/tempus/</guid>
-      <description></description>
     </item>
     
     <item>

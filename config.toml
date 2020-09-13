@@ -38,7 +38,7 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "Ruchen's portfolio"
-    subtitle = "A very first step with Git"
+    subtitle = "A growing data analyst"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -92,10 +92,10 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "NYT Masks"
-      subtitle = "How does mask use acceptance vary in the US?"
-      image = "pic11.jpg"
-      url = "blogs/blog5"
+      title = "Programming Language Preference"
+      subtitle = "What programming languages do Kaggle users recommend?"
+      image = "R_Python.jpg"
+      url = "blogs/blog3"
 
     [[params.tiles.showcase]]
       title = "Heart Disease and Risk Factors"
