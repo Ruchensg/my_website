@@ -40,6 +40,7 @@ library(broom)
 library(tidyquant)
 library(infer)
 library(openintro)
+library(knitr)
 ```
 
 
@@ -54,7 +55,7 @@ knitr::include_graphics(here::here("images", "directors.png"))
 ## Replicating the graph
 First, we load the data and examine its structure.
 
-```{r load-movies-data}
+```{r load-movies-data, warning=FALSE}
 movies <- read_csv(here::here("data", "blog6_movies.csv"))
 glimpse(movies)
 ```
