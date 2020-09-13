@@ -37,8 +37,8 @@ head(hd_data,5)</code></pre>
 <h1>2. Converting diagnosis class into outcome variable</h1>
 <p>We noticed that the outcome variable <code>class</code> has more than two levels. According to the codebook, any non-zero values can be coded as an “event.” Let’s create a new variable called <code>hd</code> to represent a binary 1/0 outcome.<br />
 There are a few other categorical/discrete variables in the dataset. Let’s also convert sex into a ‘factor’ for next step analysis. Otherwise, R will treat this as continuous by default.
-The full data dictionary is also displayed here.<br />
-[] (<a href="https://assets.datacamp.com/production/project_445/img/datadict.png" class="uri">https://assets.datacamp.com/production/project_445/img/datadict.png</a>")</p>
+The full data dictionary is also displayed here.</p>
+<p><img src="https://assets.datacamp.com/production/project_445/img/datadict.png" /></p>
 <pre class="r"><code># Use the &#39;mutate&#39; function from dplyr to recode our data
 hd_data %&gt;% mutate(hd = ifelse(class &gt; 0, 1, 0))-&gt; hd_data
 # recode sex using mutate function and save as hd_data
@@ -270,12 +270,10 @@ p_new</code></pre>
 </div>
 <div id="model-performance-metrics" class="section level1">
 <h1>10. Model performance metrics</h1>
-<p>
-Are the predictions accurate? How well does the model fit our data? We are going to use some common metrics to evaluate the model performance. The most straightforward one is Accuracy, which is the proportion of the total number of predictions that were correct. On the other hand, we can calculate the classification error rate using 1- accuracy. However, accuracy can be misleading when the response is rare (i.e., imbalanced response). Another popular metric, Area Under the ROC curve (AUC), has the advantage that it’s independent of the change in the proportion of responders. AUC ranges from 0 to 1. The closer it gets to 1 the better the model performance. Lastly, a confusion matrix is an N X N matrix, where N is the level of outcome. For the problem at hand, we have N=2, and hence we get a 2 X 2 matrix. It cross-tabulates the predicted outcome levels against the true outcome levels.
-</p>
-<p>
-After these metrics are calculated, we’ll see (from the logistic regression OR table) that older age, being male and having a lower max heart rate are all risk factors for heart disease. We can also apply our model to predict the probability of having heart disease. For a 45 years old female who has a max heart rate of 150, our model generated a heart disease probability of 0.177 indicating low risk of heart disease. Although our model has an overall accuracy of 0.71, there are cases that were misclassified as shown in the confusion matrix. One way to improve our current model is to include other relevant predictors from the dataset into our model, but that’s a task for another day!
-</p>
+<p>Are the predictions accurate? How well does the model fit our data? We are going to use some common metrics to evaluate the model performance. The most straightforward one is Accuracy, which is the proportion of the total number of predictions that were correct. On the other hand, we can calculate the classification error rate using 1- accuracy. However, accuracy can be misleading when the response is rare (i.e., imbalanced response).</p>
+<p>Another popular metric, Area Under the ROC curve (AUC), has the advantage that it’s independent of the change in the proportion of responders. AUC ranges from 0 to 1. The closer it gets to 1 the better the model performance. Lastly, a confusion matrix is an N X N matrix, where N is the level of outcome. For the problem at hand, we have N=2, and hence we get a 2 X 2 matrix. It cross-tabulates the predicted outcome levels against the true outcome levels.</p>
+<p>After these metrics are calculated, we’ll see (from the logistic regression OR table) that older age, being male and having a lower max heart rate are all risk factors for heart disease.</p>
+<p>We can also apply our model to predict the probability of having heart disease. For a 45 years old female who has a max heart rate of 150, our model generated a heart disease probability of 0.177 indicating low risk of heart disease. Although our model has an overall accuracy of 0.71, there are cases that were misclassified as shown in the confusion matrix. One way to improve our current model is to include other relevant predictors from the dataset into our model, and we will perform this in another session.</p>
 <pre class="r"><code># load Metrics package
 library(Metrics)
 # calculate auc, accuracy, clasification error

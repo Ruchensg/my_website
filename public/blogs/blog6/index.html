@@ -84,7 +84,7 @@
 <div id="objective" class="section level2">
 <h2>Objective</h2>
 <p>In this section, we would like to reproduce this graph. We would be using <code>geom_errorbar()</code> and <code>geom_rect()</code></p>
-<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/images/directors.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/directors.png" /></p>
 </div>
 <div id="replicating-the-graph" class="section level2">
 <h2>Replicating the graph</h2>
@@ -243,9 +243,9 @@ idmb_plot &lt;- ggplot(selected_directors, aes(x = mean, y = reorder(director, m
   NULL
 #idmb_plot
 
-ggsave(&quot;imdb.jpg&quot;, plot = idmb_plot,path=here::here(&quot;images&quot;),height =6, width=10 )
-knitr::include_graphics(here::here(&quot;images&quot;, &quot;imdb.jpg&quot;))</code></pre>
-<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/images/imdb.jpg" width="1500" style="display: block; margin: auto;" /></p>
+ggsave(&quot;imdb.jpg&quot;, plot = idmb_plot,path=here::here(&quot;static/img&quot;),height =6, width=10 )
+#knitr::include_graphics(here::here(&quot;static/img&quot;, &quot;imdb.jpg&quot;))</code></pre>
+<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/imdb.jpg" /></p>
 </div>
 <div id="hypothesis-testing" class="section level2">
 <h2>Hypothesis testing</h2>

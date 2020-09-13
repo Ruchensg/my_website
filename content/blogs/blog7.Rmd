@@ -44,8 +44,10 @@ library(tidyquant)
 
 The task here is to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.
 
+![](/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/challenge2.png)
+
 ```{r challenge2, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "challenge2.png"))
+# knitr::include_graphics(here::here("static/img", "challenge2.png"))
 ```
 
 
@@ -118,9 +120,9 @@ hilary_trump <- hilary +
                    aspect.ratio = 9/4,
                    plot.caption = element_text(hjust=0.5))
 # save the picture in the right proportion
-ggsave("hilary_trump.jpg",plot=hilary_trump,width = 9,height = 4, path = here::here("images"))
+ggsave("hilary_trump.jpg",plot=hilary_trump,width = 9,height = 4, path = here::here("static/img/blogs"))
 # put it here
-knitr::include_graphics(here::here("images", "hilary_trump.jpg"))
+knitr::include_graphics(here::here("static/img/blogs", "hilary_trump.jpg"))
 ```
 
 ## We try to plot top 10 candidates
@@ -143,8 +145,9 @@ top10plot <- CA_contributors_2016_bycity %>%
 	                      facet_wrap(~ candidate,scales="free",nrow=2,ncol=5)+
 	                      theme_economist(base_size = 10)
 # save the picture 
-ggsave("top10plot.jpg",plot=top10plot,width = 20,height = 15,path = here::here("images"))
+ggsave("top10plot.jpg",plot=top10plot,width = 20,height = 15,path = here::here("static/img/blogs"))
 
 # put it here
-knitr::include_graphics(here::here("images", "top10plot.jpg"))
+#knitr::include_graphics(here::here("static/img", "top10plot.jpg"))
 ```
+![](/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/top10plot.jpg)

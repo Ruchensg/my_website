@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r load-libraries, echo=FALSE}
+```{r load-libraries, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
 library(ggthemes)
@@ -48,8 +48,10 @@ library(knitr)
 ## Objective
 In this section, we would like to reproduce this graph. We would be using `geom_errorbar()` and `geom_rect()` 
 
+![](/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/directors.png)
+
 ```{r directors, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "directors.png"))
+
 ```
 
 ## Replicating the graph
@@ -119,9 +121,10 @@ idmb_plot <- ggplot(selected_directors, aes(x = mean, y = reorder(director, mean
   NULL
 #idmb_plot
 
-ggsave("imdb.jpg", plot = idmb_plot,path=here::here("images"),height =6, width=10 )
-knitr::include_graphics(here::here("images", "imdb.jpg"))
+ggsave("imdb.jpg", plot = idmb_plot,path=here::here("static/img"),height =6, width=10 )
+#knitr::include_graphics(here::here("static/img", "imdb.jpg"))
 ```
+![](/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/imdb.jpg)
 
 ## Hypothesis testing  
 
@@ -139,7 +142,6 @@ movies_two <- movies %>%
 t_movie<- t.test(rating~director,data=movies_two)
 print(t_movie)
 ```
-
 
 
 ```{r null-dist-imdb-infer, warning=FALSE}

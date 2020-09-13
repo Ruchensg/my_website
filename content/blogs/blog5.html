@@ -54,50 +54,50 @@ glimpse(nyt_mask_survey)</code></pre>
 # The id field is the FIPS code for the county
 county_map %&gt;% 
   sample_n(5)</code></pre>
-<pre><code>##     long      lat  order  hole piece            group    id
-## 1 993487 -1610289  73894 FALSE     1 0500000US22087.1 22087
-## 2 241038   231336  91325 FALSE     1 0500000US27027.1 27027
-## 3 943248  -663713  52811 FALSE     1 0500000US17081.1 17081
-## 4 475091  -811729 100286 FALSE     1 0500000US29011.1 29011
-## 5 229339   309033  94048 FALSE     1 0500000US27119.1 27119</code></pre>
+<pre><code>##       long      lat order  hole piece            group    id
+## 1 -1942890  -530517 27555 FALSE     2 0500000US06075.2 06075
+## 2  1513320  -638057 67825 FALSE     1 0500000US21159.1 21159
+## 3  1406940 -1266732  3325 FALSE     1 0500000US01113.1 01113
+## 4 -1106215 -1875755 14705 FALSE     1 0500000US02240.1 02240
+## 5  1385637  -743314 69221 FALSE     1 0500000US21199.1 21199</code></pre>
 <pre class="r"><code>county_data %&gt;%
     sample_n(5)</code></pre>
 <pre><code>##      id             name state census_region      pop_dens   pop_dens4
-## 1 48501    Yoakum County    TX         South [   10,   50) [  0,   17)
-## 2 13093     Dooly County    GA         South [   10,   50) [ 17,   45)
-## 3 42001     Adams County    PA     Northeast [  100,  500) [118,71672]
-## 4 21023   Bracken County    KY         South [   10,   50) [ 17,   45)
-## 5 37077 Granville County    NC         South [  100,  500) [ 45,  118)
+## 1 22019 Calcasieu Parish    LA         South [  100,  500) [118,71672]
+## 2 22029 Concordia Parish    LA         South [   10,   50) [ 17,   45)
+## 3 46137   Ziebach County    SD       Midwest [    0,   10) [  0,   17)
+## 4 55011   Buffalo County    WI       Midwest [   10,   50) [ 17,   45)
+## 5 54059     Mingo County    WV         South [   50,  100) [ 45,  118)
 ##     pop_dens6   pct_black    pop female white black travel_time land_area
-## 1 [  9,   25) [ 0.0, 2.0)   8286   50.3  95.1   1.5        17.8       800
-## 2 [ 25,   45) [25.0,50.0)  14188   45.9  48.2  49.9        19.7       392
-## 3 [ 82,  215) [ 0.0, 2.0) 101714   50.8  95.7   1.9        27.7       519
-## 4 [ 25,   45) [ 0.0, 2.0)   8406   49.8  97.9   0.6        34.9       206
-## 5 [ 82,  215) [25.0,50.0)  58500   48.9  64.9  32.0        27.6       532
+## 1 [ 82,  215) [25.0,50.0) 197204   51.2  71.2  25.2        20.8      1064
+## 2 [ 25,   45) [25.0,50.0)  20466   49.5  58.1  40.4        24.9       697
+## 3 [  0,    9) [ 0.0, 2.0)   2826   50.4  24.3   0.4        20.3      1961
+## 4 [  9,   25) [ 0.0, 2.0)  13188   49.1  98.0   0.4        24.3       672
+## 5 [ 45,   82) [ 0.0, 2.0)  25716   50.9  96.7   1.9        30.2       423
 ##   hh_income su_gun4 su_gun6  fips votes_dem_2016 votes_gop_2016
-## 1     49340 [ 0, 5) [ 0, 4) 48501            426           1797
-## 2     29012 [ 5, 8) [ 4, 7) 13093           1860           1941
-## 3     59492 [ 5, 8) [ 7, 8) 42001          14077          31249
-## 4     39196 [11,54] [12,54] 21023            705           2711
-## 5     49852 [ 5, 8) [ 7, 8) 37077          12827          13500
+## 1     43499 [ 8,11) [ 8,10) 22019          26293          54182
+## 2     29022 [ 8,11) [ 8,10) 22029           3272           5474
+## 3     32708 [ 0, 5) [ 0, 4) 46137            352            368
+## 4     47384 [ 8,11) [ 8,10) 55011           2531           4049
+## 5     35955 [ 8,11) [ 8,10) 54059           1365           7876
 ##   total_votes_2016 per_dem_2016 per_gop_2016 diff_2016 per_dem_2012
-## 1             2299        0.185        0.782      1371        0.192
-## 2             3836        0.485        0.506        81        0.531
-## 3            47138        0.299        0.663     17172        0.355
-## 4             3522        0.200        0.770      2006        0.355
-## 5            26920        0.476        0.501       673        0.519
+## 1            83773        0.314        0.647     27889        0.347
+## 2             8869        0.369        0.617      2202        0.409
+## 3              766        0.460        0.480        16        0.577
+## 4             6921        0.366        0.585      1518        0.509
+## 5             9469        0.144        0.832      6511        0.275
 ##   per_gop_2012 diff_2012 winner partywinner16 winner12 partywinner12
-## 1        0.798      1289  Trump    Republican   Romney    Republican
-## 2        0.462       295  Trump    Republican    Obama      Democrat
-## 3        0.631     11597  Trump    Republican   Romney    Republican
-## 4        0.628       882  Trump    Republican   Romney    Republican
-## 5        0.473      1197  Trump    Republican    Obama      Democrat
+## 1        0.634     23487  Trump    Republican   Romney    Republican
+## 2        0.581      1617  Trump    Republican   Romney    Republican
+## 3        0.413       125  Trump    Republican    Obama      Democrat
+## 4        0.478       217  Trump    Republican    Obama      Democrat
+## 5        0.701      3742  Trump    Republican   Romney    Republican
 ##   flipped
 ## 1      No
-## 2     Yes
-## 3      No
-## 4      No
-## 5     Yes</code></pre>
+## 2      No
+## 3     Yes
+## 4     Yes
+## 5      No</code></pre>
 <pre class="r"><code>glimpse(county_data)</code></pre>
 <pre><code>## Rows: 3,195
 ## Columns: 32

@@ -16,7 +16,7 @@ categories:
 <div id="challenge-2-2016-california-contributors-plots" class="section level1">
 <h1>Challenge 2: 2016 California Contributors plots</h1>
 <p>The task here is to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.</p>
-<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/images/challenge2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/challenge2.png" /></p>
 <div id="we-replicate-hilary-and-trump-chart" class="section level2">
 <h2>We replicate Hilary and Trump chart</h2>
 <pre class="r"><code># Make sure you use vroom() as it is significantly faster than read.csv()
@@ -534,10 +534,10 @@ hilary_trump &lt;- hilary +
                    aspect.ratio = 9/4,
                    plot.caption = element_text(hjust=0.5))
 # save the picture in the right proportion
-ggsave(&quot;hilary_trump.jpg&quot;,plot=hilary_trump,width = 9,height = 4, path = here::here(&quot;images&quot;))
+ggsave(&quot;hilary_trump.jpg&quot;,plot=hilary_trump,width = 9,height = 4, path = here::here(&quot;static/img/blogs&quot;))
 # put it here
-knitr::include_graphics(here::here(&quot;images&quot;, &quot;hilary_trump.jpg&quot;))</code></pre>
-<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/images/hilary_trump.jpg" width="1350" style="display: block; margin: auto;" /></p>
+knitr::include_graphics(here::here(&quot;static/img/blogs&quot;, &quot;hilary_trump.jpg&quot;))</code></pre>
+<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/blogs/hilary_trump.jpg" width="1350" style="display: block; margin: auto;" /></p>
 </div>
 <div id="we-try-to-plot-top-10-candidates" class="section level2">
 <h2>We try to plot top 10 candidates</h2>
@@ -559,10 +559,10 @@ top10plot &lt;- CA_contributors_2016_bycity %&gt;%
                           facet_wrap(~ candidate,scales=&quot;free&quot;,nrow=2,ncol=5)+
                           theme_economist(base_size = 10)
 # save the picture 
-ggsave(&quot;top10plot.jpg&quot;,plot=top10plot,width = 20,height = 15,path = here::here(&quot;images&quot;))
+ggsave(&quot;top10plot.jpg&quot;,plot=top10plot,width = 20,height = 15,path = here::here(&quot;static/img/blogs&quot;))
 
 # put it here
-knitr::include_graphics(here::here(&quot;images&quot;, &quot;top10plot.jpg&quot;))</code></pre>
-<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/images/top10plot.jpg" width="3000" style="display: block; margin: auto;" /></p>
+#knitr::include_graphics(here::here(&quot;static/img&quot;, &quot;top10plot.jpg&quot;))</code></pre>
+<p><img src="/Users/shangguanruchen/Documents/portfolioweb/my_website/static/img/top10plot.jpg" /></p>
 </div>
 </div>
