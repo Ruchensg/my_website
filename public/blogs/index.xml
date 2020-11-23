@@ -12,13 +12,23 @@
     
     
     <item>
+      <title>BBC iPlayer: Cluster Analysis</title>
+      <link>/blogs/blog8_bbc_cluster/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/blog8_bbc_cluster/</guid>
+      <description>body { text-align: justify}   img { border-radius: 15px; }
+ div.grey { background-color:#808080; border-radius: 5px; padding: 20px; border-style: groove;}   div.font {color=&#34;red&#34;}   div.navy1 { background-color:#686868; border-radius: 5px; padding: 20px; border-style: groove; color: #ffffff;}   div.navy { background-color:#A2A2B6; border-radius: 5px; padding: 20px; border-style: groove; color: #ffffff;}     .bottom-three { margin-bottom: 3cm; }  Introduction and BBC iPlayer streaming data The BBC is one of the oldest broadcasting organisations of the world.</description>
+    </item>
+    
+    <item>
       <title>Programming Language Preference</title>
       <link>/blogs/blog3/</link>
       <pubDate>Sun, 13 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>/blogs/blog3/</guid>
-      <description>Welcome to the world of data science Throughout the world of data science, there are many languages and tools that can be used to complete a given task.
-In this project, we are going to find out what tools and languages professionals use in their day-to-day work. Our data comes from the Kaggle Data Science Survey which includes responses from over 10,000 people that write code to analyze data in their daily work.</description>
+      <description>Welcome to the world of data science Throughout the world of data science, there are many languages and tools that can be used to complete a given task. And I’m writing this blog using R.
+Thanks to LBS, I have access to Datacamp projects. So in this project, we are going to find out what tools and languages professionals use in their day-to-day work. Our data comes from the Kaggle Data Science Survey which includes responses from over 10,000 people that write code to analyze data in their daily work.</description>
     </item>
     
     <item>
@@ -27,7 +37,7 @@ In this project, we are going to find out what tools and languages professionals
       <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>/blogs/blog4/</guid>
-      <description>1. Heart disease and potential risk factors Millions of people develop some sort of heart disease every year and heart disease is the biggest killer of both men and women in the United States and around the world. Statistical analysis has identified many risk factors associated with heart disease such as age, blood pressure, total cholesterol, diabetes, hypertension, family history of heart disease, obesity, lack of physical exercise, etc. In this notebook, we’re going to run statistical tests and regression models using the Cleveland heart disease dataset to assess one particular factor – maximum heart rate one can achieve during exercise and how it is associated with a higher likelihood of getting heart disease.</description>
+      <description>1. Heart disease and potential risk factors Millions of people develop some sort of heart disease every year and heart disease is the biggest killer of both men and women in the United States and around the world. Statistical analysis has identified many risk factors associated with heart disease such as age, blood pressure, total cholesterol, diabetes, hypertension, family history of heart disease, obesity, lack of physical exercise, etc.</description>
     </item>
     
     <item>

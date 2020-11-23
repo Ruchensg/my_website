@@ -115,11 +115,11 @@ disqusShortname = ""
       image = "pic04.jpg"
       url = "blogs/blog6"
 
-#    [[params.tiles.showcase]]
-#      title = "Consequat"
-#      subtitle = "Ipsum Dolor Sit Amet"
-#      image = "pic05.jpg"
-#      url = "blogs/ipsum"
+    [[params.tiles.showcase]]
+      title = "BBC iPlayer: Cluster Analysis"
+      subtitle = "Use data mining techniques to analyze the clusters of BBC iPlayer users"
+      image = "pic05.jpg"
+      url = "blogs/blog8_bbc_cluster"
 
  #   [[params.tiles.showcase]]
 #      title = "Etiam"
